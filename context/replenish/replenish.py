@@ -65,11 +65,10 @@ class replenish(ShutItModule):
 		shutit.send(''' echo "copy (select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra from land_registry) to '/tmp/lr.csv' with (format csv, delimiter ',', force_quote *)" | psql land_registry''');
 		shutit.send('''sort /tmp/all.csv | sed 's/ 00:00//' > /tmp/all.csv.sorted''')
 		shutit.send('sort /tmp/lr.csv > /tmp/lr.csv.sorted')
-		shutit.send('comm -1 -3 /tmp/lr.csv.sorted /tmp/all.csv.sorted > /tmp/delete.csv')
-		shutit.send('comm -2 -3 /tmp/lr.csv.sorted /tmp/all.csv.sorted > /tmp/add.csv')
+		shutit.send('comm -1 -3 /tmp/lr.csv.sorted /tmp/all.csv.sorted > /tmp/add.csv')
+		shutit.send('comm -2 -3 /tmp/lr.csv.sorted /tmp/all.csv.sorted > /tmp/delete.csv')
 		shutit.send('wc -l /tmp/delete.csv')
 		shutit.send('wc -l /tmp/add.csv')
-		shutit.pause_point('')
 		# insert
 		shutit.send(r'''cat <(cat <(echo ID,PRICE,DATE,POSTCODE,TYPE,NEW_BUILD,ESTATE_TYPE,BUILDING_NO,BUILDING_NAME,STREET,TOWN,CITY,DISTRICT,COUNTY,EXTRA) <(cat /tmp/add.csv)) > /tmp/insert.csv''')
 		shutit.send('''echo 'create table land_registry_tmp (id varchar, price integer, transaction_date date, postcode varchar, type char(1), new_build char(1), estate_type char(1), building_1 varchar, building_2 varchar, street varchar, town varchar, city varchar, district varchar, county varchar, extra char(1));' | psql land_registry''')
