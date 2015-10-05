@@ -61,7 +61,7 @@ class replenish(ShutItModule):
 		# shutit.set_password(password, user='')
 		#                                    - Set password for a given user on target
 		# If there's over a million rows in land_registry, assume we don't need to do the full whack.
-		shutit.send(r'''wget -qO- http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/price-paid-data/pp-complete.csv | sed 's/\r//g' > /tmp/all.csv''')
+		shutit.send(r'''wget -qO- http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/price-paid-data/pp-complete.csv | sed 's/\r//g' > /tmp/all.csv''',timeout=99999)
 		shutit.send(''' echo "copy (select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra from land_registry) to '/tmp/lr.csv' with (format csv, delimiter ',', force_quote *)" | psql land_registry''');
 		shutit.send('''sort /tmp/all.csv | sed 's/ 00:00//' > /tmp/all.csv.sorted''')
 		shutit.send('sort /tmp/lr.csv > /tmp/lr.csv.sorted')
