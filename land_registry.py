@@ -78,7 +78,7 @@ class land_registry(ShutItModule):
 		shutit.send('/root/stop_postgres.sh')
 		shutit.send('/root/start_postgres.sh')
 		shutit.login('land_registry')
-		shutit.send('''git clone --recursive https://github.com/ianmiell/land_registry.git''')
+		shutit.send('''git clone --recursive https://github.com/ianmiell/land-registry.git''')
 		shutit.send('''find . -name build.cnf | xargs chmod 0600''')
 		shutit.logout()
 		shutit.login('postgres')
