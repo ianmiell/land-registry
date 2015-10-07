@@ -16,24 +16,24 @@ copy (select * from land_registry limit 1)
 to stdout
 with csv header;  
 
--- postcodes near a single point (WC1)
+-- postcode near a single point (WC1)
 select postcode || '%'
-from postcodes
-where latitude < 51.525 + 0.1
-and latitude > 51.525 - 0.1
-and longitude > -0.116 - 0.1
-and longitude < -0.116 + 0.1; 
+from postcode
+where x < 51.525 + 0.1
+and x > 51.525 - 0.1
+and y > -0.116 - 0.1
+and y < -0.116 + 0.1; 
 
--- postcodes by month, distance from WC1.
+-- postcode by month, distance from WC1.
 select count(*), date_trunc('month',transaction_date)
 from land_registry
 where substring(postcode,'([A-Z0-9]*) .*') in (
 	select postcode 
-	from postcodes 
-	where latitude < 51.525 + 0.1
-	and latitude > 51.525 - 0.1
-	and longitude > -0.116 - 0.1
-	and longitude < -0.116 + 0.1
+	from postcode 
+	where x < 51.525 + 0.1
+	and x > 51.525 - 0.1
+	and y > -0.116 - 0.1
+	and y < -0.116 + 0.1
 )
 group by 2
 order by 2
