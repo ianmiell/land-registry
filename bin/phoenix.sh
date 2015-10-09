@@ -49,7 +49,7 @@ then
 	pushd ../haproxy
 	sed "s/HA_PROXY_PORT/${HA_PROXY_PORT}/g;s/HA_BACKEND_PORT_A/${HA_BACKEND_PORT_A}/g;s/HA_BACKEND_PORT_B/${HA_BACKEND_PORT_B}/g" haproxy.cfg.template > haproxy.cfg
 	$DOCKER build -t ${CONTAINER_BASE_NAME}_${HA_PROXY_CONTAINER_SUFFIX} .
-	$DOCKER run -d --net=host --name ${CONTAINER_BASE_NAME}_${HA_PROXY_CONTAINER_SUFFIX} ${CONTAINER_BASE_NAME}_${HA_PROXY_CONTAINER_SUFFIX}
+	$DOCKER run -t -d --net=host --name ${CONTAINER_BASE_NAME}_${HA_PROXY_CONTAINER_SUFFIX} ${CONTAINER_BASE_NAME}_${HA_PROXY_CONTAINER_SUFFIX}
 	popd
 fi
 
@@ -63,7 +63,7 @@ then
 	fi
 	pushd ../phppgadmin
 	$DOCKER build --no-cache -t phppgadmin .
-	$DOCKER run -d --name ${CONTAINER_BASE_NAME}_phppgadmin -p 15430:80 phppgadmin
+	$DOCKER run -t -d --name ${CONTAINER_BASE_NAME}_phppgadmin -p 15430:80 phppgadmin
 	popd
 fi
 
@@ -92,6 +92,6 @@ then
 fi
 # The random id is required - suspected docker bug
 RANDOM_ID=$RANDOM
-./run.sh -i "${CONTAINER_BASE_NAME}" -c "${CONTAINER_BASE_NAME}_${RANDOM_ID}" -a "-p ${NEW_PORT}:${CONTAINER_PORT} --volumes-from land_registry_db"
+./run.sh -i "${CONTAINER_BASE_NAME}" -c "${CONTAINER_BASE_NAME}_${RANDOM_ID}" -a "-p ${NEW_PORT}:${CONTAINER_PORT} --volumes-from land_registry_db -t"
 $DOCKER rm -f ${CONTAINER_BASE_NAME}_old > /dev/null 2>&1 || /bin/true
 $DOCKER rename ${CONTAINER_BASE_NAME}_${RANDOM_ID} ${CONTAINER_BASE_NAME}
