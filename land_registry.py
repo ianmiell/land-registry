@@ -40,6 +40,7 @@ class land_registry(ShutItModule):
 		shutit.logout()
 		shutit.login('land_registry')
 		shutit.send('cd /home/land_registry/land-registry/context/replenish/bin')
+		shutit.pause_point('build.sh')
 		shutit.send('./build.sh')
 		shutit.logout()
 		shutit.login('postgres')
@@ -54,13 +55,6 @@ class land_registry(ShutItModule):
 		return True
 
 	def get_config(self, shutit):
-		# CONFIGURATION
-		# shutit.get_config(module_id,option,default=None,boolean=False)
-		#                                    - Get configuration value, boolean indicates whether the item is 
-		#                                      a boolean type, eg get the config with:
-		# shutit.get_config(self.module_id, 'myconfig', default='a value')
-		#                                      and reference in your code with:
-		# shutit.cfg[self.module_id]['myconfig']
 		return True
 
 	def test(self, shutit):
