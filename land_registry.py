@@ -40,7 +40,6 @@ class land_registry(ShutItModule):
 		shutit.logout()
 		shutit.login('land_registry')
 		shutit.send('cd /home/land_registry/land-registry/context/replenish/bin')
-		shutit.pause_point('build.sh')
 		shutit.send('./build.sh')
 		shutit.logout()
 		shutit.login('postgres')

@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 #git pull origin master
 DOCKER=${DOCKER:-docker}
 CONTAINER_BASE_NAME=${CONTAINER_BASE_NAME:-land_registry}
@@ -69,7 +70,7 @@ fi
 
 
 # create the volumes
-$DOCKER create -v /var/lib/postgresql -v /etc/postgresql --name land_registry_db land_registry /bin/true || /bin/true
+$DOCKER create -v /var/lib/postgresql -v /etc/postgresql --name land_registry_db scratch /bin/true || /bin/true
 
 # Cleanup any left-over containers, build the new one, rename the old one,
 # rename the new one, delete the old one.
