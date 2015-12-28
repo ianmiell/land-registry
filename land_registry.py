@@ -74,6 +74,6 @@ def module():
 		description='',
 		maintainer='',
 		delivery_methods=['docker'],
-		depends=['shutit.tk.postgres.postgres']
+		depends=['shutit.tk.postgres.postgres','shutit.tk.sqlpad.sqlpad']
 	)
 
