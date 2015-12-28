@@ -9,7 +9,7 @@ class replenish(ShutItModule):
 
 	def build(self, shutit):
 		shutit.send(r'''wget -qO- http://publicdata.landregistry.gov.uk/market-trend-data/price-paid-data/a/pp-complete.csv | sed 's/\r//g' > /tmp/all.csv''',timeout=99999)
-		shutit.send(''' echo "copy (select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra from land_registry) to '/tmp/lr.csv' with (format csv, delimiter ',', force_quote *)" | psql land_registry''');
+		shutit.send(''' echo "copy (select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2 from land_registry) to '/tmp/lr.csv' with (format csv, delimiter ',', force_quote *)" | psql land_registry''');
 		shutit.send('''sort /tmp/all.csv | sed 's/ 00:00//' > /tmp/all.csv.sorted''')
 		shutit.send('sort /tmp/lr.csv > /tmp/lr.csv.sorted')
 		shutit.send('comm -1 -3 /tmp/lr.csv.sorted /tmp/all.csv.sorted > /tmp/add.csv')
@@ -21,10 +21,10 @@ class replenish(ShutItModule):
 		shutit.send('cat /tmp/add.csv >> /tmp/insert.csv')
 		shutit.send('''echo 'create table land_registry_tmp (id varchar, price integer, transaction_date date, postcode varchar, type char(1), new_build char(1), estate_type char(1), building_1 varchar, building_2 varchar, street varchar, town varchar, city varchar, district varchar, county varchar, extra1 char(1), extra2 char(1));' | psql land_registry''')
 		shutit.send('''echo "copy land_registry_tmp from '/tmp/insert.csv' delimiter ',' csv header;" | psql land_registry''')
-		shutit.send('''echo "insert into land_registry (id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra) select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra from land_registry_tmp" | psql land_registry''',timeout=999999)
+		shutit.send('''echo "insert into land_registry (id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2) select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2 from land_registry_tmp" | psql land_registry''',timeout=999999)
 		shutit.send('''echo "drop table land_registry_tmp" | psql land_registry''')
 		# delete
-		shutit.send('''echo 'create table land_registry_tmp (id varchar, price integer, transaction_date date, postcode varchar, type char(1), new_build char(1), estate_type char(1), building_1 varchar, building_2 varchar, street varchar, town varchar, city varchar, district varchar, county varchar, extra char(1));' | psql land_registry''')
+		shutit.send('''echo 'create table land_registry_tmp (id varchar, price integer, transaction_date date, postcode varchar, type char(1), new_build char(1), estate_type char(1), building_1 varchar, building_2 varchar, street varchar, town varchar, city varchar, district varchar, county varchar, extra1 char(1), extra2 char(1));' | psql land_registry''')
 		shutit.send('''echo "copy land_registry_tmp from '/tmp/delete.csv' delimiter ',' csv header" | psql land_registry''')
 		shutit.send('''echo "delete from land_registry where id in (select id from land_registry_tmp)" | psql land_registry''')
 		shutit.send('''echo "drop table land_registry_tmp" | psql land_registry''')

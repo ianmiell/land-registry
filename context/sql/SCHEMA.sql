@@ -49,7 +49,8 @@ CREATE TABLE land_registry (
     city character varying,
     district character varying,
     county character varying,
-    extra character(1)
+    extra1 character(1),
+    extra2 character(1)
 );
 
 
