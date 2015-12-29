@@ -30,7 +30,7 @@ class land_registry(ShutItModule):
 		shutit.send('''find . -name build.cnf | xargs chmod 0600''')
 		shutit.logout()
 		shutit.login('postgres')
-		if shutit.cfg[self.module_id]['seed']:
+		if shutit.cfg[self.module_id]['seed'] == 'Y':
 			shutit.send('echo "create database land_registry" | psql')
 			shutit.send('/home/land_registry/land-registry/context/bin/create_postgres_user.sh')
 			shutit.send('cat /home/land_registry/land-registry/context/sql/SCHEMA.sql | psql land_registry')
@@ -54,7 +54,7 @@ class land_registry(ShutItModule):
 		return True
 
 	def get_config(self, shutit):
-		shutit.get_config(self.module_id, 'seed', default=False, boolean=True)
+		shutit.get_config(self.module_id, 'seed', default='N')
 		return True
 
 	def test(self, shutit):

@@ -4,6 +4,7 @@ set -x
 #git pull origin master
 DOCKER=${DOCKER:-docker}
 CONTAINER_BASE_NAME=${CONTAINER_BASE_NAME:-land_registry}
+SEED=${SEED:-N}
 # haproxy image suffix
 #                             Sent on to:
 #                             HA_BACKEND_PORT_A
@@ -70,12 +71,17 @@ fi
 
 
 # create the volumes
-$DOCKER create -v /var/lib/postgresql -v /etc/postgresql --name land_registry_db busybox /bin/true || /bin/true
+$DOCKER create -v /var/lib/postgresql:/var/land_registry/var/lib/postgresql -v /etc/postgresql:/var/land_registry/etc/postgresql --name land_registry_db busybox /bin/true || /bin/true
 
 # Cleanup any left-over containers, build the new one, rename the old one,
 # rename the new one, delete the old one.
 $DOCKER rm -f ${CONTAINER_BASE_NAME}_old > /dev/null 2>&1 || /bin/true
-./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db
+if [[ $SEED = 'Y' ]]
+then
+	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db -s tk.shutit.land_registry.land_registry seed yes
+else
+	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db
+fi
 
 # If there's a running instance, gather the used port, and move any old container
 USED_PORT=''

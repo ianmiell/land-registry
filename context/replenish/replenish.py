@@ -9,7 +9,7 @@ class replenish(ShutItModule):
 
 	def build(self, shutit):
 		shutit.send(r'''wget -qO- http://publicdata.landregistry.gov.uk/market-trend-data/price-paid-data/a/pp-complete.csv | sed 's/\r//g' > /tmp/all.csv''',timeout=99999)
-		if shutit.cfg[self.module_id]['seed']:
+		if shutit.cfg[self.module_id]['seed'] == 'Y':
 			shutit.send(r'''cat <(cat <(echo ID,PRICE,DATE,POSTCODE,TYPE,NEW_BUILD,ESTATE_TYPE,BUILDING_NO,BUILDING_NAME,STREET,TOWN,CITY,DISTRICT,COUNTY,EXTRA1,EXTRA2) <(cat /tmp/all.csv)) > /tmp/insert.csv''')
 			shutit.send('''echo "copy land_registry from '/tmp/insert.csv' delimiter ',' csv header;" | psql land_registry''')
 		else:
@@ -43,7 +43,7 @@ class replenish(ShutItModule):
 		# shutit.get_config(self.module_id, 'myconfig', default='a value')
 		#                                      and reference in your code with:
 		# shutit.cfg[self.module_id]['myconfig']
-		shutit.get_config(self.module_id, 'seed', default=False, boolean=True)
+		shutit.get_config(self.module_id, 'seed', default='N')
 		return True
 
 	def test(self, shutit):
