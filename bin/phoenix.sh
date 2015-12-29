@@ -78,7 +78,7 @@ $DOCKER create -v /var/lib/postgresql:/var/land_registry/var/lib/postgresql -v /
 $DOCKER rm -f ${CONTAINER_BASE_NAME}_old > /dev/null 2>&1 || /bin/true
 if [[ $SEED = 'Y' ]]
 then
-	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db -s tk.shutit.land_registry.land_registry seed yes
+	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db -s tk.shutit.land_registry.land_registry seed Y
 else
 	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db
 fi
