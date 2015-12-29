@@ -30,17 +30,17 @@ class land_registry(ShutItModule):
 		shutit.send('''find . -name build.cnf | xargs chmod 0600''')
 		shutit.logout()
 		shutit.login('postgres')
-		shutit.send('echo "create database land_registry" | psql')
-		shutit.send('/home/land_registry/land-registry/context/bin/create_postgres_user.sh')
-		shutit.send('cat /home/land_registry/land-registry/context/sql/SCHEMA.sql | psql land_registry')
+		if shutit.cfg[self.module_id]['seed']:
+			shutit.send('echo "create database land_registry" | psql')
+			shutit.send('/home/land_registry/land-registry/context/bin/create_postgres_user.sh')
+			shutit.send('cat /home/land_registry/land-registry/context/sql/SCHEMA.sql | psql land_registry')
+			shutit.send('''echo "copy postcode from '/home/land_registry/land-registry/context/postcodes/postcode.dat' delimiter ','" | psql land_registry''')   
+			shutit.send('/home/land_registry/land-registry/context/bin/post_build.sh')
 		shutit.send('cat /home/land_registry/land-registry/context/sql/DROP_INDEX.sql | psql land_registry',timeout=99999)
-		shutit.send('''echo "copy postcode from '/home/land_registry/land-registry/context/postcodes/postcode.dat' delimiter ','" | psql land_registry''')   
-		shutit.send('''echo 'create index land_registry_postcode_building_1_idx on land_registry (postcode, building_1)' | psql land_registry''')
-		shutit.send('/home/land_registry/land-registry/context/bin/post_build.sh')
 		shutit.logout()
 		shutit.login('land_registry')
 		shutit.send('cd /home/land_registry/land-registry/context/replenish/bin')
-		shutit.send('./build.sh')
+		shutit.send('./build.sh -s land_registry.replenish.replenish.replenish seed ' + shutit.cfg[self.module_id]['seed'] )
 		shutit.logout()
 		shutit.login('postgres')
 		shutit.send('cat /home/land_registry/land-registry/context/sql/CREATE_INDEX.sql | psql land_registry',timeout=99999)
@@ -54,6 +54,7 @@ class land_registry(ShutItModule):
 		return True
 
 	def get_config(self, shutit):
+		shutit.get_config(self.module_id, 'seed', default=False, boolean=True)
 		return True
 
 	def test(self, shutit):
