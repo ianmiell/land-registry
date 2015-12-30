@@ -18,4 +18,4 @@ do
 		;;
 	esac
 done
-${DOCKER} run -d --name ${CONTAINER_NAME} ${DOCKER_ARGS} ${IMAGE_NAME} /bin/sh -c '/root/start_postgres.sh && sleep infinity'
+${DOCKER} run -d --name ${CONTAINER_NAME} ${DOCKER_ARGS} ${IMAGE_NAME} /bin/sh -c '/root/start_postgres.sh && (sqlpad --port 3000 &) && sleep infinity'
