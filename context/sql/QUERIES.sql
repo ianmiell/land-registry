@@ -39,3 +39,6 @@ group by 2
 order by 2
 desc;
 
+
+select count(*), avg(price), date_trunc('year', transaction_date) from land_registry where city = 'LONDON' and price > 0 and price < 1000000 and transaction_date >= '2014-01-01' group by 3
+
