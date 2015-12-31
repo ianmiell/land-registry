@@ -15,7 +15,7 @@ class land_registry(ShutItModule):
 		shutit.send('adduser land_registry sudo')
 		shutit.send('echo "%sudo ALL=(ALL:ALL) ALL" > /etc/sudoers.d/sudo')
 		shutit.send('chmod 0440 /etc/sudoers.d/sudo')
-		shutit.send("""echo "0 0 * * * ls | crontab -u postgres -""")                          
+		shutit.send("""echo "0 0 * * * ls" | crontab -u postgres -""")                          
 		shutit.login('land_registry')
 		shutit.send('''git clone --recursive https://github.com/ianmiell/land-registry.git''')
 		shutit.send('''find . -name build.cnf | xargs chmod 0600''')
