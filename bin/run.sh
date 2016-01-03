@@ -3,7 +3,7 @@
 DOCKER=${DOCKER:-docker}
 IMAGE_NAME=land_registry
 CONTAINER_NAME=$IMAGE_NAME
-DOCKER_ARGS='-p 5432:5432'
+DOCKER_ARGS=''
 while getopts "i:c:a:" opt
 do
 	case "$opt" in
