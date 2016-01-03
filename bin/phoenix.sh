@@ -82,7 +82,7 @@ if [[ $SEED = 'Y' ]]
 then
 	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db -s tk.shutit.land_registry.land_registry seed Y
 else
-	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME} -s target volumes_from land_registry_db
+	./build.sh -s repository tag yes -s repository name ${CONTAINER_BASE_NAME}
 fi
 
 # If there's a running instance, gather the used port, and move any old container
