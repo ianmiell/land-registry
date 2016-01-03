@@ -75,7 +75,7 @@ def module():
 		'tk.shutit.land_registry.land_registry', 1845506479.00,
 		description='',
 		maintainer='',
-		delivery_methods=['docker'],
+		delivery_methods=['docker','dockerfile'],
 		depends=['shutit.tk.postgres.postgres']
 	)
 
