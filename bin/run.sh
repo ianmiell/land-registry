@@ -3,7 +3,7 @@
 DOCKER=${DOCKER:-docker}
 IMAGE_NAME=land_registry
 CONTAINER_NAME=$IMAGE_NAME
-DOCKER_ARGS=''
+DOCKER_ARGS='-p 5432:5432'
 while getopts "i:c:a:" opt
 do
 	case "$opt" in
@@ -18,4 +18,4 @@ do
 		;;
 	esac
 done
-${DOCKER} run -d --name ${CONTAINER_NAME} ${DOCKER_ARGS} ${IMAGE_NAME} /bin/sh -c '/root/start_postgres.sh && (sqlpad --port 3000 &) && sleep infinity'
+${DOCKER} run -d --name ${CONTAINER_NAME} ${DOCKER_ARGS} ${IMAGE_NAME} /bin/sh -c '/root/start_postgres.sh && sleep infinity'
