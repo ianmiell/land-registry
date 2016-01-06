@@ -5,8 +5,6 @@ set -x
 DOCKER=${DOCKER:-docker}
 CONTAINER_BASE_NAME=${CONTAINER_BASE_NAME:-land_registry}
 SEED=${SEED:-N}
-SQLPADPORT=3000
-SQLPADPORTEXPOSED=9081
 # haproxy image suffix
 #                             Sent on to:
 #                             HA_BACKEND_PORT_A
@@ -102,5 +100,5 @@ fi
 # The random id is required - suspected docker bug
 RANDOM_ID=$RANDOM
 $DOCKER rm -f ${CONTAINER_BASE_NAME}_old > /dev/null 2>&1 || /bin/true
-./run.sh -i "${CONTAINER_BASE_NAME}" -c "${CONTAINER_BASE_NAME}_${RANDOM_ID}" -a "-p ${NEW_PORT}:${CONTAINER_PORT} -p ${SQLPADPORTEXPOSED}:${SQLPADPORT} --volumes-from land_registry_db -t"
+./run.sh -i "${CONTAINER_BASE_NAME}" -c "${CONTAINER_BASE_NAME}_${RANDOM_ID}" -a "-p ${NEW_PORT}:${CONTAINER_PORT} --volumes-from land_registry_db -t"
 $DOCKER rename ${CONTAINER_BASE_NAME}_${RANDOM_ID} ${CONTAINER_BASE_NAME}
