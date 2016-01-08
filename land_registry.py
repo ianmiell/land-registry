@@ -20,14 +20,17 @@ class land_registry(ShutItModule):
 		shutit.send('''git clone --recursive https://github.com/ianmiell/land-registry.git''')
 		shutit.send('''find . -name build.cnf | xargs chmod 0600''')
 		shutit.logout()
+		shutit.login('postgres')
+		# These will remain
+		shutit.insert_text('host all  all    0.0.0.0/0  md5','/etc/postgresql/9.3/main/pg_hba.conf')
+		shutit.insert_text("""listen_addresses='*'""",'/etc/postgresql/9.3/main/postgresql.conf',"#listen_addresses = 'localhost'")
+		shutit.logout('postgres')
 		if shutit.cfg[self.module_id]['seed'] == 'Y':
 			shutit.login('postgres')
 			shutit.insert_text('fsync = off','/etc/postgresql/9.3/main/postgresql.conf')
 			shutit.insert_text('synchronous_commit = off','/etc/postgresql/9.3/main/postgresql.conf')
 			shutit.insert_text('maintenance_work_mem = 1024MB','/etc/postgresql/9.3/main/postgresql.conf')
 			shutit.insert_text('checkpoint_segments = 100','/etc/postgresql/9.3/main/postgresql.conf')
-			shutit.insert_text('host all  all    0.0.0.0/0  md5','/etc/postgresql/9.3/main/pg_hba.conf')
-			shutit.insert_text("""listen_addresses='*'""",'/etc/postgresql/9.3/main/postgresql.conf',"#listen_addresses = 'localhost'")
 			shutit.logout()
 			shutit.send('/root/stop_postgres.sh')
 			shutit.send('/root/start_postgres.sh')
@@ -55,6 +58,7 @@ class land_registry(ShutItModule):
 		return True
 
 	def get_config(self, shutit):
+		# If this is a 'virgin' environment, seed the data
 		shutit.get_config(self.module_id, 'seed', default='N')
 		return True
 
@@ -76,6 +80,6 @@ def module():
 		description='',
 		maintainer='',
 		delivery_methods=['docker','dockerfile'],
-		depends=['shutit.tk.postgres.postgres']
+		depends=['shutit.tk.postgres.postgres','shutit.tk.pgcharts.pgcharts']
 	)
 
