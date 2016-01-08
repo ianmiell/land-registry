@@ -13,7 +13,7 @@ class replenish(ShutItModule):
 			shutit.send(r'''cat <(cat <(echo ID,PRICE,DATE,POSTCODE,TYPE,NEW_BUILD,ESTATE_TYPE,BUILDING_NO,BUILDING_NAME,STREET,TOWN,CITY,DISTRICT,COUNTY,EXTRA1,EXTRA2) <(cat /tmp/all.csv)) > /tmp/insert.csv''')
 			shutit.send('''echo "copy land_registry (id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2) from '/tmp/insert.csv' delimiter ',' csv header;" | psql -U postgres -h landregistrydb land_registry''')
 		else:
-			shutit.send('''echo "copy (select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2 from land_registry) to '/tmp/lr.csv' with (format csv, delimiter ',', force_quote *)" | psql -U postgres -h landregistrydb land_registry''')
+			shutit.send('''echo "copy (select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2 from land_registry) to STDOUT with (format csv, delimiter ',', force_quote *)" | psql -U postgres -h landregistrydb land_registry > /tmp/lr.csv''')
 			shutit.send('''sort /tmp/all.csv | sed 's/ 00:00//' > /tmp/all.csv.sorted''')
 			shutit.send('sort /tmp/lr.csv > /tmp/lr.csv.sorted')
 			shutit.send('comm -1 -3 /tmp/lr.csv.sorted /tmp/all.csv.sorted > /tmp/add.csv')
