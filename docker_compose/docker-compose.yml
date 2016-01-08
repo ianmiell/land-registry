@@ -1,0 +1,12 @@
+landregistrydb:
+  image: postgres:9.5
+  volumes:
+    - /var/dockervolumes/postgres/land_registry/9.5/data:/var/lib/postgresql/data
+  expose:
+    - "5432"
+  name: landregistrydb
+landregistryupdater:
+  build: landregistryupdater
+  name: landregistryupdater
+  links:
+    - landregistrydb
