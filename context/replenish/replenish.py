@@ -29,7 +29,8 @@ class replenish(ShutItModule):
 			shutit.send('''echo "drop table land_registry_tmp" | psql -U postgres -h landregistrydb land_registry''')
 			# delete
 			shutit.send('''echo 'create table land_registry_tmp (id varchar, price integer, transaction_date date, postcode varchar, type char(1), new_build char(1), estate_type char(1), building_1 varchar, building_2 varchar, street varchar, town varchar, city varchar, district varchar, county varchar, extra1 char(1), extra2 char(1));' | psql -U postgres -h landregistrydb land_registry''')
-			shutit.send('''echo "copy land_registry_tmp from '/tmp/delete.csv' delimiter ',' csv header" | psql -U postgres -h landregistrydb land_registry''')
+			shutit.send('''echo "drop table land_registry_tmp" | psql -U postgres -h landregistrydb land_registry''')
+			shutit.send('''cat /tmp/delete.csv | echo "copy land_registry_tmp from STDIN delimiter ',' csv header" | psql -U postgres -h landregistrydb land_registry''')
 			shutit.send('''echo "delete from land_registry where id in (select id from land_registry_tmp)" | psql -U postgres -h landregistrydb land_registry''')
 			shutit.send('''echo "drop table land_registry_tmp" | psql -U postgres -h landregistrydb land_registry''')
 		shutit.send('rm -f /tmp/*.csv',check_exit=False)
