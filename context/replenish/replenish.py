@@ -25,7 +25,7 @@ class replenish(ShutItModule):
 			shutit.send('cat /tmp/add.csv >> /tmp/insert.csv')
 			shutit.send('''echo "drop table land_registry_tmp" | psql -U postgres -h landregistrydb land_registry''')
 			shutit.send('''echo 'create table land_registry_tmp (id varchar, price integer, transaction_date date, postcode varchar, type char(1), new_build char(1), estate_type char(1), building_1 varchar, building_2 varchar, street varchar, town varchar, city varchar, district varchar, county varchar, extra1 char(1), extra2 char(1));' | psql -U postgres -h landregistrydb land_registry''')
-			shutit.send('''echo "copy land_registry_tmp from STDIN /tmp/insert.csv' delimiter ',' csv header;" | psql -U postgres -h landregistrydb land_registry < /tmp/insert.csv''')
+			shutit.send('''echo "copy land_registry_tmp from STDIN delimiter ',' csv header;" | psql -U postgres -h landregistrydb land_registry < /tmp/insert.csv''')
 			shutit.send('''echo "insert into land_registry (id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2) select id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2 from land_registry_tmp" | psql -U postgres -h landregistrydb land_registry''',timeout=999999)
 			# delete
 			shutit.send('''echo "drop table land_registry_tmp" | psql -U postgres -h landregistrydb land_registry''')
