@@ -9,8 +9,8 @@ class replenish(ShutItModule):
 
 	def build(self, shutit):
 		shutit.send(r'''wget -qO- http://publicdata.landregistry.gov.uk/market-trend-data/price-paid-data/a/pp-complete.csv | sed 's/\r//g' > /tmp/all.csv''',timeout=99999)
-		shutit.send('echo "drop index land_registry_postcode_building_1_idx" | psql land_registry')
-		shutit.send('echo "drop index land_registry_transaction_date_1_idx" | psql land_registry')
+		shutit.send('echo "drop index land_registry_postcode_building_1_idx" | psql -U postgres -h land_registry land_registry')
+		shutit.send('echo "drop index land_registry_transaction_date_1_idx" | psql -U postgres -h land_registry land_registry')
 		shutit.send(r'''cat <(cat <(echo ID,PRICE,DATE,POSTCODE,TYPE,NEW_BUILD,ESTATE_TYPE,BUILDING_NO,BUILDING_NAME,STREET,TOWN,CITY,DISTRICT,COUNTY,EXTRA1,EXTRA2) <(cat /tmp/all.csv)) > /tmp/insert.csv''')
 		if shutit.cfg[self.module_id]['seed'] == 'Y':
 			shutit.send('''echo "copy land_registry (id, price, transaction_date, postcode, type, new_build, estate_type, building_1, building_2, street, town, city, district, county, extra1, extra2) from STDIN delimiter ',' csv header;" >> /tmp/insert.csv''')
