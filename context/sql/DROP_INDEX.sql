@@ -1,1 +1,0 @@
-drop index land_registry_postcode_building_1_idx;
