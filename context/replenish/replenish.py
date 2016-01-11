@@ -39,8 +39,8 @@ class replenish(ShutItModule):
 			shutit.send('''psql -U postgres -h landregistrydb land_registry < /tmp/delete.csv''')
 			shutit.send('''echo "delete from land_registry where id in (select id from land_registry_tmp)" | psql -U postgres -h landregistrydb land_registry''')
 			shutit.send('''echo "drop table land_registry_tmp" | psql -U postgres -h landregistrydb land_registry''')
-		shutit.send('echo "create index land_registry_postcode_building_1_idx ON land_registry USING btree (postcode, building_1);" | psql land_registry') 
-		shutit.send('echo "create index land_registry_transaction_date_1_idx ON land_registry USING btree (transaction_date);" | psql land_registry') 
+		shutit.send('echo "create index land_registry_postcode_building_1_idx ON land_registry USING btree (postcode, building_1);" | psql -U postgres -h landregistrydb land_registry') 
+		shutit.send('echo "create index land_registry_transaction_date_1_idx ON land_registry USING btree (transaction_date);" | psql -U postgres -h landregistrydb land_registry') 
 		shutit.send('rm -f /tmp/*.csv',check_exit=False)
 		return True
 
