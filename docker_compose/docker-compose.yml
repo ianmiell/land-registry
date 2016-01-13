@@ -10,15 +10,13 @@ landregistryupdater:
   name: landregistryupdater
   links:
     - landregistrydb
-#landregistrypgcharts:
-#  image: imiell/pgcharts
-#  name: landregistrypgcharts
-#  links:
-#    - landregistrydb
-#  ports:
-#    - "9042:9042"
-#  command: /bin/bash -c '/root/pgcharts/build/bin/pgcharts setup pgsql://postgres@landregistrydb/pgcharts && /root/pgcharts/build/bin/pgcharts start && /root/pgcharts/build/bin/pgcharts register pgsql://postgres@landregistrydb/land_registry && sleep infinity'
-#
-#./build/bin/pgcharts setup=postgresql://[user[:password]@][netloc][:port][/dbname][?sslmode=...]
-#start
-#Start the embedded pgcharts HTTP server on the port it's been setup to listen to, which defaults to 8042. The
+landregistrypgcharts:
+  image: imiell/pgcharts
+  name: landregistrypgcharts
+  links:
+    - landregistrydb
+  ports:
+    - "9042:9042"
+# First time only, but can be run each time
+  #command: /bin/bash -c '/root/pgcharts/build/bin/pgcharts setup pgsql://postgres@landregistrydb/pgcharts && /root/pgcharts/build/bin/pgcharts start && /root/pgcharts/build/bin/pgcharts register pgsql://postgres@landregistrydb/land_registry && sleep infinity'
+  command: /bin/bash -c '/root/pgcharts/build/bin/pgcharts setup pgsql://postgres@landregistrydb/pgcharts && /root/pgcharts/build/bin/pgcharts start && sleep infinity'
