@@ -16,7 +16,7 @@ landregistrypgcharts:
   links:
     - landregistrydb
   ports:
-    - "9042:9042"
+    - "2000:9042"
 # First time only, but can be run each time
   #command: /bin/bash -c '/root/pgcharts/build/bin/pgcharts setup pgsql://postgres@landregistrydb/pgcharts && /root/pgcharts/build/bin/pgcharts start && /root/pgcharts/build/bin/pgcharts register pgsql://postgres@landregistrydb/land_registry && sleep infinity'
   command: /bin/bash -c '/root/pgcharts/build/bin/pgcharts setup pgsql://postgres@landregistrydb/pgcharts && /root/pgcharts/build/bin/pgcharts start && sleep infinity'
