@@ -7,7 +7,7 @@ then
 	exit 1
 fi
 pushd ..
-$SHUTIT build -m shutit-library "$@"
+$SHUTIT build -d bash -m shutit-library "$@"
 if [[ $? != 0 ]]
 then
 	popd
